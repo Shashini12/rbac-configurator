@@ -1,24 +1,22 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/createClient';
+import { supabase } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/use-toast';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -27,16 +25,9 @@ export default function LoginPage() {
       if (error) throw error;
 
       router.push('/dashboard');
-      toast({
-        title: 'Success',
-        description: 'Logged in successfully',
-      });
+      toast.success('Logged in successfully');
     } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,8 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { createClient } from '@/utils/supabase/server';
-import { Toaster } from "@/components/ui/toaster";
+import { createServerClient } from '@/utils/supabase/server'
+import { Toaster } from 'sonner'
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,12 +16,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
+  const supabase = createServerClient() // Instead of createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   return (
     <html lang="en">
       <body className={inter.className}>
+      <Toaster position="top-center" richColors />
         <div className="min-h-screen bg-gray-100">
           <nav className="bg-white shadow">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
