@@ -1,12 +1,10 @@
-import { useToast } from '@/components/ui/use-toast';
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/createClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { FormEvent } from 'react';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -14,9 +12,9 @@ export function Login() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClientClient();
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -24,9 +22,9 @@ export function Login() {
 
     if (error) {
       toast({
-        title: 'Error',
+        title: "Error",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } else {
       router.push('/dashboard');

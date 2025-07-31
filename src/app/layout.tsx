@@ -1,7 +1,7 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { createClient } from '@/utils/supabase/server';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,15 +22,15 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-100">
-          {user && (
-            <nav className="bg-white shadow">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                  <div className="flex">
-                    <div className="flex-shrink-0 flex items-center">
-                      <h1 className="text-xl font-bold">RBAC Configurator</h1>
-                    </div>
+          <nav className="bg-white shadow">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between h-16">
+                <div className="flex">
+                  <div className="flex-shrink-0 flex items-center">
+                    <h1 className="text-xl font-bold">RBAC Configurator</h1>
                   </div>
+                </div>
+                {user && (
                   <div className="flex items-center">
                     <form action="/auth/signout" method="post">
                       <button className="text-gray-600 hover:text-gray-800" type="submit">
@@ -38,10 +38,10 @@ export default async function RootLayout({
                       </button>
                     </form>
                   </div>
-                </div>
+                )}
               </div>
-            </nav>
-          )}
+            </div>
+          </nav>
           <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             {children}
           </main>

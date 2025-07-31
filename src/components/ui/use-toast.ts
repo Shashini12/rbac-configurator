@@ -12,7 +12,8 @@ type ToasterToast = ToastProps & {
   title?: string  // Changed from React.ReactNode to string
   description?: string  // Changed from React.ReactNode to string
   action?: ToastActionElement
-  type?: ToastType
+  type
+  ?: ToastType
   visible?: boolean
 }
 
