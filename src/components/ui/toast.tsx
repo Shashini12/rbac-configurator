@@ -1,10 +1,35 @@
-// components/ui/toast.tsx
 "use client"
 
 import * as React from "react"
-import { Toast, ToastProvider, ToastViewport } from "@radix-ui/react-toast"
-import { cva, type VariantProps } from "class-variance-authority"
-import { X } from "lucide-react"
+import { Toast, ToastProvider, ToastViewport, ToastClose as RadixToastClose } from "@radix-ui/react-toast"
+
+// 1. Replace lucide-react X icon with SVG
+const XIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+)
+
+// 2. Simple cva implementation
+const cva = (base: string, config: { variants: { variant: Record<string, string> }, defaultVariants: { variant: string } }) => {
+  return (props: { variant?: string }) => {
+    const variant = props?.variant || config.defaultVariants.variant
+    return `${base} ${config.variants.variant[variant] || ''}`.trim()
+  }
+}
+
+type VariantProps<T> = T extends (props: infer P) => any ? P : never
 
 const toastVariants = cva(
   "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
@@ -12,8 +37,7 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: "border bg-background text-foreground",
-        destructive:
-          "destructive group border-destructive bg-destructive text-destructive-foreground",
+        destructive: "destructive group border-destructive bg-destructive text-destructive-foreground",
       },
     },
     defaultVariants: {
@@ -22,12 +46,49 @@ const toastVariants = cva(
   }
 )
 
+// 3. Define missing components
+const ToastAction = React.forwardRef<
+  React.ElementRef<"button">,
+  React.ComponentPropsWithoutRef<"button">
+>(({ className, ...props }, ref) => (
+  <button
+    ref={ref}
+    className="inline-flex h-8 shrink-0 items-center justify-center rounded-md bg-transparent px-3 text-sm font-medium transition-colors hover:bg-secondary focus:outline-none focus:ring-1 focus:ring-ring disabled:pointer-events-none disabled:opacity-50"
+    {...props}
+  />
+))
+ToastAction.displayName = "ToastAction"
+
+const ToastClose = React.forwardRef<
+  React.ElementRef<typeof RadixToastClose>,
+  React.ComponentPropsWithoutRef<typeof RadixToastClose>
+>(({ className, ...props }, ref) => (
+  <RadixToastClose
+    ref={ref}
+    className="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100"
+    toast-close=""
+    {...props}
+  >
+    <XIcon />
+  </RadixToastClose>
+))
+ToastClose.displayName = "ToastClose"
+
+const ToastTitle = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className="text-sm font-semibold">{children}</div>
+)
+
+const ToastDescription = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className="text-sm opacity-90">{children}</div>
+)
+
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast> &
   VariantProps<typeof toastVariants>
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>
 
 export interface ToastOptions {
+  id?: string
   title?: string
   description?: string
   action?: ToastActionElement
@@ -209,4 +270,4 @@ function Toaster() {
   )
 }
 
-export { toast, useToast, Toaster }
+export { toast, useToast, Toaster, ToastAction, ToastClose, ToastTitle, ToastDescription }

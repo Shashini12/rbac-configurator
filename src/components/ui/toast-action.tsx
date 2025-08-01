@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { ToastAction as RadixToastAction } from "@radix-ui/react-toast"
-import { cva, type VariantProps } from "class-variance-authority"
+
 
 const ToastAction = React.forwardRef<
   React.ElementRef<typeof RadixToastAction>,
@@ -21,3 +21,7 @@ const ToastAction = React.forwardRef<
 ToastAction.displayName = RadixToastAction.displayName
 
 export { ToastAction }
+
+function cn(...inputs: (string | undefined)[]): string {
+    return inputs.filter(Boolean).join(' ')
+  }

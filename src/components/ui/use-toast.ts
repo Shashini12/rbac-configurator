@@ -1,19 +1,18 @@
-// Inspired by react-hot-toast library
 import * as React from "react"
-import type { ToastActionElement, ToastProps } from "@/components/ui/toast"
+import { Toast, ToastProvider, ToastViewport, ToastClose as RadixToastClose } from "@radix-ui/react-toast"
+import type { ToastProps, ToastActionElement } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 5000 // Reduced from 1000000 to more reasonable 5 seconds
 
-type ToastType = "foreground" | "background" | "blank"
 
+type ToastType = "foreground" | "background" | "blank"
 type ToasterToast = ToastProps & {
   id: string
-  title?: string  // Changed from React.ReactNode to string
-  description?: string  // Changed from React.ReactNode to string
+  title?: string
+  description?: string
   action?: ToastActionElement
-  type
-  ?: ToastType
+  type?: ToastType
   visible?: boolean
 }
 
@@ -199,4 +198,4 @@ function useToast() {
   }
 }
 
-export { useToast, toast }
+export { useToast, toast, type ToastProps, type ToastActionElement, type ToastOptions  }
