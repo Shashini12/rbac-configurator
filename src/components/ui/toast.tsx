@@ -270,4 +270,4 @@ function Toaster() {
   )
 }
 
-export { toast, useToast, Toaster, ToastAction, ToastClose, ToastTitle, ToastDescription }
+export { toast, useToast, Toaster, ToastAction, ToastClose, ToastTitle, ToastDescription, type ToastProps, type ToastActionElement }

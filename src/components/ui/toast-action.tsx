@@ -23,5 +23,5 @@ ToastAction.displayName = RadixToastAction.displayName
 export { ToastAction }
 
 function cn(...inputs: (string | undefined)[]): string {
-    return inputs.filter(Boolean).join(' ')
-  }
+  return inputs.filter(Boolean).join(' ')
+}
